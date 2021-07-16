@@ -1,0 +1,367 @@
+﻿<Window x:Class="wsm.DbDropForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:wsm"
+        mc:Ignorable="d"
+        Title="DROP TABLE"
+        Height="470" 
+        MinHeight="470"
+        MaxHeight="470"
+        Width="816"
+        MinWidth="816"
+        MaxWidth="816"
+        Closing="Window_Closing">
+    
+    <Grid HorizontalAlignment="Left" 
+          Height="420" 
+          VerticalAlignment="Top" 
+          Width="806" 
+          Margin="0">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" 
+                Grid.ColumnSpan="2" 
+                Height="30" 
+                Padding="0" 
+                BorderBrush="Black"
+                BorderThickness="0.75"
+                Margin="1 0 1 0"
+                Background="White" >
+
+            <Label Content = "{Binding CountryUpper}"
+                   VerticalAlignment="Center" 
+                   Foreground="Black" 
+                   HorizontalAlignment="Center" 
+                   FontSize="14" 
+                   FontWeight="SemiBold"/>
+        </Border>
+
+        <Border Grid.Column="0" 
+                Grid.Row="1" 
+                Height="25" 
+                Padding="0" 
+                Margin="1 0 0 0"
+                BorderBrush="Black"
+                BorderThickness="0.75 0 0 0.75"
+                Background="White" >
+
+            <Label VerticalAlignment="Center" 
+                   Foreground="DarkRed" 
+                   HorizontalAlignment="Center" 
+                   FontSize="11" 
+                   FontWeight="SemiBold">FORECAST</Label>
+        </Border>
+
+        <Border Grid.Column="1" 
+                Grid.Row="1" 
+                Height="25" 
+                Padding="0" 
+                Margin="0 0 1 0"
+                BorderBrush="Black"
+                BorderThickness="0.75 0 0.75 0.75"
+                Background="White" >
+
+            <Label VerticalAlignment="Center" 
+                   Foreground="Navy" 
+                   HorizontalAlignment="Center" 
+                   FontSize="11" 
+                   FontWeight="SemiBold">HISTORIC</Label>
+        </Border>
+
+        <DataGrid Name="DbForecast" 
+                  Grid.Row="2" 
+                  Grid.Column="0"
+                  CanUserAddRows="False" 
+                  IsReadOnly="True"
+                  HeadersVisibility="None"
+                  Padding="0"
+                  FontSize="9"
+                  Margin="1 0 0 0"
+                  AutoGenerateColumns="False"
+                  BorderThickness="1 0 0 1"
+                  BorderBrush="Black"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  GridLinesVisibility="None"
+                  MouseDoubleClick="DbForecast_MouseDoubleClick"
+                  IsSynchronizedWithCurrentItem="False">
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="0 0 0 1"/>
+                    <Setter Property="Margin" Value="0 0 0 2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#c9ebff" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="dodgerblue" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding State}" Value="NOK">
+                            <Setter Property="Background" Value="#FFCB0F"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <StackPanel Background="White">
+                                            <Expander IsExpanded="True" Background="White" Margin="-2" Padding="2 0 0 0">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal" Height="22">
+                                                        <TextBlock Text="{Binding Name}" Margin="5 4 5 2" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                        <TextBlock Text=":" Margin="0 4 5 2" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                        <TextBlock Text="{Binding ItemCount}" Margin="0 4 5 0" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ForCurveId}" Header="curve__id" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForTableName}" Header="table__name" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForCurveName}" Header="curve__name" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForCurveType}" Header="curve__type" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForDataType}" Header="data__type" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForUnit}" Header="unit" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForFrequency}" Header="frequency" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForFunction}" Header="function" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForIssueDate}" Header="issue__date" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForCreated}" Header="created" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForModified}" Header="modified" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForDataFrom}" Header="data__from" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForDataTo}" Header="data__to" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding ForDataSize}" Header="data__size" FontSize="9"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <DataGrid Name="DbHistoric" 
+                  ItemsSource="{Binding}"
+                  Grid.Row="2" 
+                  Grid.Column="1"
+                  CanUserAddRows="False" 
+                  IsReadOnly="True"
+                  HeadersVisibility="None"
+                  Padding="0"
+                  Margin="0 0 1 0"
+                  AutoGenerateColumns="False"
+                  BorderThickness="1 0 1 1"
+                  BorderBrush="DimGray"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  GridLinesVisibility="None"
+                  MouseDoubleClick="DbHistoric_MouseDoubleClick"
+                  IsSynchronizedWithCurrentItem="False">
+
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="0 0 0 1"/>
+                    <Setter Property="Margin" Value="0 0 0 2"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#c9ebff" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="dodgerblue" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding State}" Value="NOK">
+                            <Setter Property="Background" Value="#FFCB0F"></Setter>
+
+                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <StackPanel Background="White">
+                                            <Expander IsExpanded="True" Background="White" Margin="-2" Padding="2 0 0 0">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal" Height="22">
+                                                        <TextBlock Text="{Binding Name}" Margin="5 4 5 2" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                        <TextBlock Text=":" Margin="0 4 5 2" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                        <TextBlock Text="{Binding ItemCount}" Margin="0 4 5 0" Foreground="Black" FontWeight="SemiBold" FontSize="9"/>
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding HisCurveId}" Header="curve__id" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisTableName}" Header="table__name" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisCurveName}" Header="curve__name" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisCurveType}" Header="curve__type" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisDataType}" Header="data__type" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisUnit}" Header="unit" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisFrequency}" Header="frequency" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisFunction}" Header="function" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisDataFrom}" Header="data__from" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisDataTo}" Header="data__to" FontSize="9"/>
+                <DataGridTextColumn Binding="{Binding HisDataSize}" Header="data__size" FontSize="9"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <Button Name="RemoveDbForecast" 
+                Grid.Row="3" 
+                Grid.Column="0" 
+                Width="200" 
+                Height="35" 
+                Margin="0"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Content="DROP"
+                Click="RemoveDbForecast_Click">
+
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Button.Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" BlurRadius="4" Opacity="0.5" />
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=db_forecast, Path=SelectedIndex}" Value = "-1">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Button.Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="Black" Direction="320" ShadowDepth="0" BlurRadius="0" Opacity="0" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Button Name="RemoveDbHistoric" 
+                Grid.Row="3" 
+                Grid.Column="1" 
+                Width="200" 
+                Height="35" 
+                Margin="0"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Content="DROP"
+                Click="RemoveDbHistoric_Click">
+
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Button.Effect">
+                        <Setter.Value>
+                            <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" BlurRadius="4" Opacity="0.5" />
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding ElementName=db_historic, Path=SelectedIndex}" Value = "-1">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Button.Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="Black" Direction="320" ShadowDepth="0" BlurRadius="0" Opacity="0" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</Window>

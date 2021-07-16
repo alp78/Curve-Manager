@@ -1,0 +1,233 @@
+﻿<Page x:Class="wsm.WslForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:wsm"
+        mc:Ignorable="d"
+        d:DesignHeight="740" 
+        d:DesignWidth="1202"
+        Title="WSL"
+        Width="1202"
+        MinWidth="1202"
+        MaxWidth="1202"
+        Height="740"
+        MinHeight="740"
+        MaxHeight="740"
+        KeepAlive="True">
+
+    <Grid Width="1205" Height="740" Margin="1 1 0 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="1074"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="342"/>
+            <RowDefinition Height="342"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="0" Grid.Row="0" Height="50" Padding="5" Margin="0" Background="White" BorderBrush="Black" BorderThickness="1 1 0 1">
+            <Label VerticalAlignment="Center" Foreground="Black" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold">COUNTRY</Label>
+        </Border>
+
+        <Border Grid.Column="1" Grid.Row="0" Height="50" Padding="5" Margin="0" Background="White" BorderBrush="Black" BorderThickness="1 1 1 1">
+            <Label VerticalAlignment="Center" Foreground="Black" HorizontalAlignment="Center" FontSize="16" FontWeight="SemiBold">MONITOR</Label>
+        </Border>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="270"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+
+            <ListBox Name="CountryListBox" 
+                     Grid.Row="0" 
+                     Padding="5 10 10 0"
+                     Width="120" 
+                     FontSize="11"
+                     Margin="0 0 0 0"
+                     BorderThickness="0"
+                     BorderBrush="Black"
+                     SelectionMode="Extended"
+                     HorizontalAlignment="Left" 
+                     HorizontalContentAlignment="Left"
+                     MouseDoubleClick="CountryListBox_MouseDoubleClick">
+
+
+            </ListBox>
+
+            <Label Grid.Row="1" Margin="4 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="INITIALIZATION" FontSize="12" FontWeight="DemiBold"/>
+
+            <CheckBox Name="InitHistoric" 
+                      Content="Historic" 
+                      Grid.Row="1" 
+                      HorizontalAlignment="Left" 
+                      Width="80" 
+                      Margin="9 5 0 0"
+                      VerticalAlignment="Center"
+                      IsChecked="False"
+                      Checked="InitHistoric_Checked"
+                      Unchecked="InitHistoric_Unchecked">
+
+            </CheckBox>
+
+            <CheckBox Name="InitForecast" 
+                      Content="Forecast" 
+                      Grid.Row="1" 
+                      HorizontalAlignment="Left" 
+                      Width="80" 
+                      Margin="9 0 0 0"
+                      VerticalAlignment="Bottom"
+                      IsChecked="False"
+                      Checked="InitForecast_Checked"
+                      Unchecked="InitForecast_Unchecked">
+
+            </CheckBox>
+        </Grid>
+
+
+        <Grid Grid.Row="2" Grid.Column="0" Height="340" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="97"/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="110"/>
+                <RowDefinition Height="110"/>
+                <RowDefinition Height="55"/>
+                <RowDefinition Height="55"/>
+            </Grid.RowDefinitions>
+
+            <Button Name="StartListen"
+                    Grid.Column="0" 
+                    Grid.Row="0" 
+                    Width="80"
+                    Height="70"
+                    VerticalAlignment="Center"
+                    Click="StartListen_Click" 
+                    Grid.ColumnSpan="2" 
+                    HorizontalAlignment="Left"
+                    Margin="12,0,21,0">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Button.Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" BlurRadius="4" Opacity="0.5" />
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=CountryListBox, Path=SelectedIndex}" Value = "-1">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Button.Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" Direction="320" ShadowDepth="0" BlurRadius="0" Opacity="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="START" FontSize="12" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <Button Name="StopListen"
+                    Grid.Column="0" 
+                    Grid.Row="1" 
+                    Width="80"
+                    Height="70"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Click="StopListen_Click" 
+                    Grid.ColumnSpan="2" 
+                    Margin="12,0,21,0">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Button.Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="Black" Direction="320" ShadowDepth="3" BlurRadius="4" Opacity="0.5" />
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=CountryListBox, Path=SelectedIndex}" Value = "-1">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Button.Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" Direction="320" ShadowDepth="0" BlurRadius="0" Opacity="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+
+                <Button.Content>
+                    <StackPanel>
+                        <TextBlock Text="STOP" FontSize="12" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <Label Name="TimeoutLabel" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Margin="4,2,2,0" Grid.ColumnSpan="2" FontWeight="DemiBold">TIMEOUT [S]</Label>
+            <TextBox Name="Timeout" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" FontSize="12" Width="90" Height="16" Margin="9,29,5,9" Text="28800" Grid.ColumnSpan="2"></TextBox>
+
+            <Label Name="DurationLabel" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" HorizontalContentAlignment="Left" Margin="4,2,2,0" Grid.ColumnSpan="2" FontWeight="DemiBold">DURATION [D]</Label>
+            <TextBox Name="Duration" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" FontSize="12" Width="90" Height="16" Margin="6,29,5,9" Text="90" Grid.ColumnSpan="2"></TextBox>
+
+        </Grid>
+
+        <Grid Name="MonitorGrid"
+              Grid.Row="1" 
+              Grid.RowSpan="2" 
+              Grid.Column="1" 
+              Margin="0 1 0 0"
+              Height="690" 
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+              IsHitTestVisible="True" 
+              Width="1080" 
+              VerticalAlignment="Top" 
+              HorizontalAlignment="Left">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="268.5"/>
+                <ColumnDefinition Width="268.5"/>
+                <ColumnDefinition Width="268.5"/>
+                <ColumnDefinition Width="268.5"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="227"/>
+                <RowDefinition Height="227"/>
+                <RowDefinition Height="227"/>
+            </Grid.RowDefinitions>
+
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="AT" Grid.Row="0" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap" Margin="0 1 0 0"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="BE" Grid.Row="0" Grid.Column="1" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap" Margin="0 1 0 0"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="CH" Grid.Row="0" Grid.Column="2" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap" Margin="0 1 0 0"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="DE" Grid.Row="0" Grid.Column="3" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap" Margin="0 1 0 0"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="DK" Grid.Row="1" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="ES" Grid.Row="1" Grid.Column="1" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="FR" Grid.Row="1" Grid.Column="2" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="IT" Grid.Row="1" Grid.Column="3" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="NL" Grid.Row="2" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="NO" Grid.Row="2" Grid.Column="1" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="SE" Grid.Row="2" Grid.Column="2" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+            <TextBox Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsHitTestVisible="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextBlock.LineHeight="10" TextBlock.LineStackingStrategy="BlockLineHeight" Name="UK" Grid.Row="2" Grid.Column="3" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1" Width="265" Height="223" FontSize="9" Background="Black" FontFamily="Verdana" FontWeight="Normal" Foreground="White" Padding="10 7 0 0" TextWrapping = "Wrap"/>
+
+        </Grid>
+
+    </Grid>
+</Page>
